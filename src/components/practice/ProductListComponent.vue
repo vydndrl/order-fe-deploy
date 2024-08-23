@@ -26,7 +26,9 @@
       </v-col>
 
       <v-col cols="auto" v-if="!isAdmin" :style="{ marginTop: '10px' }">
-        <v-btn class="mr-2" style="background-color: aliceblue">🛒 장바구니</v-btn>
+        <v-btn class="mr-2" style="background-color: aliceblue" @click="addCart"
+          >🛒 장바구니</v-btn
+        >
         <v-btn style="background-color: aliceblue" @click="createOrder"
           >🪄 주문하기</v-btn
         >
@@ -93,8 +95,12 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   props: ["isAdmin", "pageTitle"],
+  computed: {
+    ...mapGetters(["getProductsInCart"]),
+  },
   data() {
     return {
       searchType: "optional",
@@ -181,6 +187,19 @@ export default {
         this.loadProduct();
       }
     },
+
+    addCart() {
+      const orderPorducts = Object.keys(this.selected)
+        .filter((key) => this.selected[key])
+        .map((key) => {
+          const product = this.productList.find((p) => p.id == key);
+          return { id: product.id, name: product.name, quantity: product.quantity };
+        });
+      orderPorducts.forEach((p) => this.$store.dispatch("addCart", p));
+      console.log(this.getProductsInCart);
+      // window.location.reload();
+    },
+
     async createOrder() {
       const orderPorducts = Object.keys(this.selected)
         .filter((key) => this.selected[key])
