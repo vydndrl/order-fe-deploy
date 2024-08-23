@@ -38,3 +38,9 @@ jobs:
 
       - name: clear s3 bucket
         run: aws s3 rm s3://www.yeskiticket.shop/ --recursive
+
+      - name: deploy to s3
+        run: aws s3 cp ./dist s3://www.yeskiticket.shop/ --recursive
+
+      - name: invalidate cloudfont caches
+        run: aws cloudfront create-invalidation --distribution-id E10M884SEIPJML --paths "/*"
