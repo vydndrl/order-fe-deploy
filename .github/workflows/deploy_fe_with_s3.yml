@@ -43,4 +43,4 @@ jobs:
         run: aws s3 cp ./dist s3://www.yeskiticket.shop/ --recursive
 
       - name: invalidate cloudfront cache
-        port: aws cloudfront create-invalidation --distribution-id E10M884SEIPJML --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id E10M884SEIPJML --paths "/*"
